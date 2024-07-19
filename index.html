@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mantra Counter</title>
+	<link rel="icon" type="image/x-icon" href="/icons/favicon.ico">
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            text-align: center;
+            background-color: #f0f8ff;
+            font-family: Arial, sans-serif;
+        }
+        #mantra {
+            font-size: 1.5em;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        #count {
+            font-size: 5em;
+            color: #007bff;
+            margin: 20px 0;
+        }
+        #counter-area {
+            width: 80%;
+            height: 150px;
+            border: 3px solid #007bff;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            background-color: #e6f7ff;
+        }
+        #buttons {
+            display: flex;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        button {
+            font-size: 1.5em;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div id="mantra"></div>
+    <div id="counter-area" onclick="increment(event)">
+        <div id="count">0</div>
+    </div>
+    <div id="buttons">
+        <button type="reset" onclick="resetCounter()">Reset</button>
+    </div>
+    <script>
+        const mantras = [
+            "Om Bhur Bhuva Swaha, Tat Savitur Varenyam, Bhargo Devasya Dhimahi, Dhiyo Yo Nah Prachodayat",
+            "Om Namo Narayanaya",
+            "Om Nama Shivaya",
+            "Om Maitreya Namah",
+            "Om Kreem Kalikayai Namah",
+            "Om Gam Ganapataye Namah",
+            "Om Shree Ganeshaya Namah",
+            "Om Bhagavate Vasudevaya Namah",
+            "Om Hreem Dum Durgayai Namah",
+            "Sri Ram Jaya Ram Jaya Jaya Ram",
+            "Jai Shree Ram",
+            "Jai Shree Hanuman",
+            "Swamiye Saranam Ayyappa",
+            "Om Subramanyaya Namaha",
+            "Om Shri Vardhanaya Namah",
+            "Om Naga Devathayai Namaha",
+            "Om Shree Saraswatyai Namaha",
+            "Om Shree Lakshmi Devyai Namaha",
+            "Om Brahma Devaya Namaha",
+            "Om Shree Vishnuaya Namaha",
+            "Radhe Radhe or Radhe Krishna",
+            "Om Shri Satyanarayanaya Namaha",
+            "Hare Krishna Hare Krishna, Krishna Krishna Hare Hare, Hare Rama Hare Rama, Rama Rama Hare Hare"
+        ];
+
+        let currentMantraIndex = 0;
+        let targetCount;
+        let count = 0;
+
+        function promptForTargetCount() {
+            targetCount = parseInt(prompt("Enter the target count for each mantra:", "108"), 10) || 108;
+        }
+
+        function updateMantra() {
+            document.getElementById("mantra").innerHTML = mantras[currentMantraIndex];
+        }
+
+        function increment(event) {
+            event.stopPropagation(); // Prevent the event from propagating to the body click listener
+            count += 1;
+            document.getElementById("count").innerHTML = count;
+            if (count >= targetCount) {
+                playSoundAndVibrate();
+                currentMantraIndex = (currentMantraIndex + 1) % mantras.length;
+                updateMantra();
+                count = 0;
+                document.getElementById("count").innerHTML = count;
+            }
+        }
+
+        function resetCounter() {
+            count = 0;
+            document.getElementById("count").innerHTML = count;
+            currentMantraIndex = 0;
+            promptForTargetCount();
+            updateMantra();
+        }
+
+        function playSoundAndVibrate() {
+            const audio = new Audio('./done.mp3'); // You can change the URL to any sound you like
+            audio.play();
+            if (navigator.vibrate) {
+                navigator.vibrate(360); // Vibration for 360ms
+            }
+        }
+
+        // Initialize
+        document.body.addEventListener("click", increment);
+        promptForTargetCount();
+        updateMantra();   
+    </script>
+</body>
+</html>
